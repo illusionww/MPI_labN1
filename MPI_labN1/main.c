@@ -73,6 +73,20 @@ void masterThread(int coreNum, int rank) {
         if (rank+1 != coreNum) 
             MPI_Send(&u[k+1][m], 1, MPI_DOUBLE, rank+1, TYPE, MPI_COMM_WORLD);
     }
+    
+    int i;
+    double ***n = (double ***) malloc((coreNum-1) * sizeof (double **));
+    for (i = 1; i < coreNum; i++){
+        n[i] = (double **) malloc((nT+1) * sizeof (double *));
+        for (k = 0; k < (nT+1); k++) {
+            n[i][k] = (double *) malloc(SXLEN * sizeof (double));
+        }
+    }
+    
+    for (i = 1; i < coreNum; i++) {
+        MPI_Recv(&n[i][0][0], (nT+1)*(SXLEN+1), MPI_DOUBLE, i, TYPE, MPI_COMM_WORLD, &status);
+    }
+    
 }
 
 void slaveThread(int coreNum, int rank) {
@@ -103,7 +117,7 @@ void slaveThread(int coreNum, int rank) {
         u[k+1][m] = u[k][m] - tau/h*(u[k][m] - u[k][m-1]) + tau*F(k, SXLEN);
         if (rank+1 != coreNum) 
             MPI_Send(&u[k+1][m], 1, MPI_DOUBLE, rank+1, TYPE, MPI_COMM_WORLD);
-        else
-            printf("fuck yeah");
     }
+    
+    MPI_Send(&u[0][0], (nT+1)*(SXLEN+1), MPI_DOUBLE, 0, TYPE, MPI_COMM_WORLD);
 }
