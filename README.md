@@ -1,4 +1,4 @@
-MPI_labN1
+MPI_labs
 =========
 
-Fitst task for MPI labs in MIPT
+Tasks for MPI labs in MIPT
