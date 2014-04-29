@@ -6,7 +6,7 @@ int main(int argc, char* argv[]) {
     int n;
     int rank, coreNum, type = 2;
     MPI_Status status;
-    
+
     n = atoi(argv[1]);
 
     MPI_Init(&argc, &argv);
@@ -20,13 +20,13 @@ int main(int argc, char* argv[]) {
 
         printf("core count = %d\n", coreNum);
 
-	for (i = 1; i <= frame; i++) {
-	    sum += 1.0/i;
-	}	
+        for (i = 1; i <= frame; i++) {
+            sum += 1.0 / i;
+        }
 
         for (i = 1; i < coreNum; i++) {
             int left = i* frame;
-            int right = (i+1)*frame > n ? n : (i+1)*frame;
+            int right = (i + 1) * frame > n ? n : (i + 1) * frame;
 
             MPI_Send(&left, 1, MPI_INT, i, type, MPI_COMM_WORLD);
             MPI_Send(&right, 1, MPI_INT, i, type, MPI_COMM_WORLD);
