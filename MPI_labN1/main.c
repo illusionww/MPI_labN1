@@ -15,7 +15,7 @@
 
 #define PHI(k) 1.0 - (double)k*tau // it's k, [t][0]
 #define PSI(m) 1.0 - (double)m*h   // it's m, [0][x]
-#define F   1.0
+#define F      1
 
 #define TYPE 2
 
@@ -56,6 +56,8 @@ void masterThread(int coreNum, int rank) {
     for (k = 0; k < (nT+1); k++)
         u[k] = (double *) malloc((MXLEN+1) * sizeof (double));
     
+    double t1 = MPI_Wtime();
+    
     // initial&boundary conditions
     for (k = 0; k <= nT; k++)
         u[k][0] = PHI(k);
@@ -89,11 +91,17 @@ void masterThread(int coreNum, int rank) {
         }
     }
     
+     t1 = MPI_Wtime() - t1;
+    
+    printf("! %f\n", t1);
+    
     for (i = 0; i < coreNum-1; i++) {
-        for (k = 0; k < nT; k++) {
+        for (k = 0; k <= nT; k++) {
             MPI_Recv(&(n[i][k][0]), (SXLEN+1), MPI_DOUBLE, i+1, TYPE, MPI_COMM_WORLD, &status);
         }
     }
+    
+   
     
     wr(u, n, coreNum);
 }
@@ -129,7 +137,7 @@ void slaveThread(int coreNum, int rank) {
             MPI_Send(&(u[k+1][m]), 1, MPI_DOUBLE, rank+1, TYPE, MPI_COMM_WORLD);
     }
     
-    for (k = 0; k < nT; k++) {
+    for (k = 0; k <= nT; k++) {
         MPI_Send(&(u[k][0]), (SXLEN+1), MPI_DOUBLE, 0, TYPE, MPI_COMM_WORLD);
     }
     
