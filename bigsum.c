@@ -1,3 +1,10 @@
+/*
+ *  Additional task. Parallel Algorithms
+ *	Sum of two big numbers using MPI.
+ *
+ *  Created by Ivashkin Vladimir on 25.05.14.
+ */
+ 
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -23,7 +30,6 @@ void sum(char* s1, char* s2, int len) {
     
     for (i = len; i > 0; i--) {
         s1[i] += s2[i - 1];
-        printf("rank: %d, ! %d\n", rank, s1[i]);
         if (s1[i] > 9) {
             s1[i] -= 10;
             s1[i-1]++;
@@ -113,7 +119,7 @@ int main(int argc, char **argv) {
 
         strTemp[0] = 0;
         for (i = 0; i < masterLen; i++)
-            strTemp[i + 1] = str[0][padding[0] + i];
+            strTemp[i + 1] = str[0][i];
 
         printf("strTemp: ");
         for (i = 0; i < masterLen; i++)
@@ -133,7 +139,7 @@ int main(int argc, char **argv) {
             else
                 MPI_Recv(trash, slaveLen + 1, MPI_CHAR, i, 2, MPI_COMM_WORLD, &status);
             for (j = 0; j < resLen + 1; j++)
-                printf("%d ", result[j]);
+                printf("%d", result[j]);
             printf("\n");
         }
         if (result[masterLen] == 1)
@@ -142,7 +148,7 @@ int main(int argc, char **argv) {
             result[i] = strTemp[i];
         printf("result:");
         for (i = 0; i < resLen + 1; i++)
-            printf("%d ", result[i]);
+            printf("%d", result[i]);
         printf("\n");
     } else {
         int len;

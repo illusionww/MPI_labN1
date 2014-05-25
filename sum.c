@@ -1,3 +1,10 @@
+/*
+ *  Intro task. Parallel Algorithms
+ *	Calculates the sum of a number of 1/x.
+ *
+ *  Created by Ivashkin Vladimir on 5.03.14.
+ */
+ 
 #include<stdio.h>
 #include<mpi.h>
 #include<stdlib.h>

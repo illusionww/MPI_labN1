@@ -1,3 +1,10 @@
+/*
+ *  MPI_LabN1. Parallel Algorithms
+ *	The numerical solution of the Convection–diffusion equation.
+ *
+ *  Created by Ivashkin Vladimir on 1.04.14.
+ */
+ 
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>

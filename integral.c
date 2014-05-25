@@ -1,3 +1,10 @@
+/*
+ *  Task 3. Parallel Algorithms
+ *	Integrate f(x) = sin(1/(3-x)) from 0 to 2.99.
+ *
+ *  Created by Ivashkin Vladimir on 11.05.14.
+ */
+ 
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
