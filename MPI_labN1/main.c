@@ -82,6 +82,10 @@ void masterThread(int coreNum, int rank) {
         }
     }
     
+    t1 = MPI_Wtime() - t1;
+    
+    printf("! %f\n", t1);
+    
     int i;
     double ***n = (double ***) malloc((coreNum-1) * sizeof (double **));
     for (i = 0; i < coreNum-1; i++){
@@ -90,10 +94,6 @@ void masterThread(int coreNum, int rank) {
             n[i][k] = (double *) malloc(SXLEN * sizeof (double));
         }
     }
-    
-     t1 = MPI_Wtime() - t1;
-    
-    printf("! %f\n", t1);
     
     for (i = 0; i < coreNum-1; i++) {
         for (k = 0; k <= nT; k++) {

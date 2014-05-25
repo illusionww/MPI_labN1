@@ -15,7 +15,7 @@
 
 #define start 0.01
 #define end 3.0
-#define thread_num 1
+#define thread_num 7
 
 double *res;
 double *bounds;
