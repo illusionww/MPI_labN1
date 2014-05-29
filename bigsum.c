@@ -36,7 +36,7 @@ void sum(char* s1, char* s2, int len) {
         }
     }
     for (i = 0; i < len + 1; i++)
-        printf("%d ", s1[i]);
+        printf("%d", s1[i]);
     printf("\n");
 }
 
@@ -133,11 +133,14 @@ int main(int argc, char **argv) {
             result[i] = 0;
         char* trash = (char *) malloc(slaveLen + 1);
         for (i = coreNum - 1; i > 0; i--) {
-            MPI_Recv(&result[masterLen + slaveLen * (i-1)], slaveLen + 1, MPI_CHAR, i, 1, MPI_COMM_WORLD, &status);
-            if (result[masterLen + slaveLen * (i + 1) - 1] == 1)
+            if (result[masterLen + slaveLen * i] == 1) {
+                MPI_Recv(&result[masterLen + slaveLen * (i-1)], slaveLen + 1, MPI_CHAR, i, 1, MPI_COMM_WORLD, &status);
                 MPI_Recv(&result[masterLen + slaveLen * (i-1)], slaveLen + 1, MPI_CHAR, i, 2, MPI_COMM_WORLD, &status);
-            else
+            } else {
+                printf("%d %d %d\n", i, masterLen + slaveLen * i, result[masterLen + slaveLen * i]);
+                MPI_Recv(&result[masterLen + slaveLen * (i-1)], slaveLen + 1, MPI_CHAR, i, 1, MPI_COMM_WORLD, &status);
                 MPI_Recv(trash, slaveLen + 1, MPI_CHAR, i, 2, MPI_COMM_WORLD, &status);
+            }
             for (j = 0; j < resLen + 1; j++)
                 printf("%d", result[j]);
             printf("\n");
@@ -154,7 +157,7 @@ int main(int argc, char **argv) {
         int len;
         MPI_Recv(&len, 1, MPI_INT, 0, 0, MPI_COMM_WORLD, &status);
         printf("rank %d, len %d\n", rank, len);
-        str[0] = (char *) malloc(len + 1); // +1 для переполнения
+        str[0] = (char *) malloc(len + 1);
         str[1] = (char *) malloc(len);
 
         str[0][0] = 0;
